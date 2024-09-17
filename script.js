@@ -87,7 +87,6 @@ console.log(format);
 function getLearnerData(course, ag, data) {
 
   // Allocate memory for a new array
-    let result = [];
     let id = [];
 
     // Looping through array of objects
@@ -95,24 +94,44 @@ function getLearnerData(course, ag, data) {
     if (!id.some(element => element.id === e.learner_id)) {
       id.push({id: e.learner_id});
     }
+    if (!id.some(element => element.id === e.submission.score)) {
+      let temp = 0
+      ag.assignments.forEach((a) => {
+      let average = e.submission.score / a.points_possible
+      temp += average;
+    })
+    id.push({average: temp / 3});
     if (!id.some(element => element.id === e.assignment_id)) {
       id.push({assignment_id: e.assignment_id});
     }
-    if (!id.some(element => element.id === e.submission.score)) {
-      id.push({score: e.submission.score});
-    }
+  }
+
     });
+      
   
-    // Getting the average from the scores - this works, but formatting is not right
-    for (const i of ag.assignments) {
-      for (const j of data) {
-        if (i.id == j.assignment_id) {
-          let average = j.submission.score / i.points_possible;
-          id.push({average: average})
-        }
-      }
-    }
-    return id;
+
+      // Getting the average from the scores - this works, but formatting is not right
+      // for (const i of ag.assignments) {
+      //   for (const j of data) {
+      //     if (i.id == j.assignment_id) {
+      //       let average = j.submission.score / i.points_possible;
+      //       id.push({average: average})
+      //   }
+        
+      // }
+
+    // Checking if the assigment is due yet
+    // for (const i of ag.assignments) {
+    //   for (const j of data) {
+    //     if (i.due_at < j.submission.submitted_at) {
+    //       id.push({date: "Assignment is not due yet"})
+    //     }
+    //   }
+    // }
+
+    //   }
+    
+      return id;
   }
 
 // Helper Function
