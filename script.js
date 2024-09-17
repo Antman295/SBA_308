@@ -102,14 +102,33 @@ function getLearnerData(course, ag, data) {
       id.push({score: e.submission.score});
     }
     });
-
-    // Getting the average from the scores
-
+  
+    // Getting the average from the scores - this works, but formatting is not right
+    for (const i of ag.assignments) {
+      for (const j of data) {
+        if (i.id == j.assignment_id) {
+          let average = j.submission.score / i.points_possible;
+          id.push({average: average})
+        }
+      }
+    }
     return id;
   }
 
 // Helper Function
+// function getAverage (ag, data) {
+//   let average = [];
 
+//   for (const i of ag.assignments) {
+//     for (const j of data) {
+//       if (i.id == j.assignment_id) {
+//         let average = j.submission.score / i.points_possible;
+//         average.push({average: average})
+//       }
+//     }
+//   }
+//   return averages;
+// }
 
 
 //     if (i == 0) { // If not the learner_id
