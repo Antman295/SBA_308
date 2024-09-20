@@ -90,6 +90,11 @@ function getLearnerData(course, ag, data) {
   // Allocate memory for a new array
 
     let avg = 0;
+
+    // If points possible was set to 0 and if it's a number and not a string
+    if (ag.assignments.score == 0 && typeof ag.assignments.score !== 'string') {
+      console.log("Invalid input! You cannot divide by 0!")
+  } else {
   // Check if an AssignmentGroup does not belong to its course
   try {
     if (course.id !== ag.course_id) {
@@ -141,7 +146,7 @@ function getLearnerData(course, ag, data) {
   }
       return id;
   }
-
+}
 
 // Helper Function
 // Get average of score
@@ -160,12 +165,8 @@ function getAverage () {
       average = totalScores / totalPointsPossible;
   return average;
   }
-    // console.log("Score: ", data.submission.score);
-  // console.log("Points possible: ", ag.points_possible);
-    // Catch other errors and alert the user 
-if (AssignmentGroup.assignments.score == 0) { // If points possible was set to 0
-    console.log("Invalid input! You cannot divide by 0!")
-}
+
+
   // function getLearnerData(course, ag, submissions) {
   //   // here, we would process this data to achieve the desired result.
   //   const result = [
@@ -186,18 +187,3 @@ if (AssignmentGroup.assignments.score == 0) { // If points possible was set to 0
   //   return result;
   // }
   
-  // const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-  
-  // console.log(result);
-
-        // Getting the average from the scores - this works, but formatting is not right
-      // for (const i of ag.assignments) {
-      //   for (const j of data) {
-      //     if (i.id == j.assignment_id) {
-      //       let average = j.submission.score / i.points_possible;
-      //       id.push({average: average})
-      //   }
-        
-      // }
-  
-    //   }
