@@ -1,6 +1,6 @@
 # SBA_308
 ## Project Description:
-This utilizes JavaScripts concent to format data from arrays with object. This must be done by completing the following objectives:
+This project utilizes JavaScript concepts to format data from arrays with object. This must be done by completing the following objectives:
 
 **JavaScript Requirements:**
 1. Employ basic JavaScript syntax accurately.
