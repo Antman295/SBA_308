@@ -103,10 +103,8 @@ function getLearnerData(course, ag, data) {
         id: e.learner_id,
         avg: avg
       }
-      // newStudent[e.assignment_id] = scorePercent(ag, e);
       for (const score of ag.assignments) {
       newStudent[e.assignment_id] = (e.submission.score / score.points_possible);
-      avg = getAverage();
       break;
       }
       id.push(newStudent);
@@ -131,6 +129,7 @@ function getLearnerData(course, ag, data) {
             }
 
             }
+            avg = getAverage();
           }
         })
       }
@@ -147,16 +146,18 @@ function getLearnerData(course, ag, data) {
 // Helper Function
 // Get average of score
 function getAverage () {
-  let sum = 0;
   let average = 0;
+  let totalScores = 0;
+  let totalPointsPossible = 0;
      for (const i of AssignmentGroup.assignments) {
         for (const j of LearnerSubmissions) {
           if (i.id == j.assignment_id) {
-            sum = j.submission.score + i.points_possible;
-            average += sum
+            totalScores = j.submission.score;
+            totalPointsPossible = i.points_possible;
         }
       } 
       }
+      average = totalScores / totalPointsPossible;
   return average;
   }
     // console.log("Score: ", data.submission.score);
