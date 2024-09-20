@@ -77,107 +77,90 @@ const CourseInfo = {
   ];
 
 // Transform the data into an array of objects
+let id = [];
 
-
-// Getting the ID of the learners - I'll explore this idea later
+// Getting the ID of the learners
 let format = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
 console.log(format);
 
+
 function getLearnerData(course, ag, data) {
 
   // Allocate memory for a new array
-    let id = [];
 
+    let avg = 0;
+  // Check if an AssignmentGroup does not belong to its course
+  try {
+    if (course.id !== ag.course_id) {
+      throw "Error! The input is invalid."
+    
+  }
     // Looping through array of objects
     data.forEach((e) => {
     if (!id.some(element => element.id === e.learner_id)) {
-      id.push({id: e.learner_id});
-    }
-    if (!id.some(element => element.id === e.submission.score)) {
-      let temp = 0
-      ag.assignments.forEach((a) => {
-      let average = e.submission.score / a.points_possible
-      temp += average;
-    })
-    id.push({average: temp / 3});
-    if (!id.some(element => element.id === e.assignment_id)) {
-      id.push({assignment_id: e.assignment_id});
-    }
+      let newStudent = {
+        id: e.learner_id,
+        avg: avg
+      }
+      // newStudent[e.assignment_id] = scorePercent(ag, e);
+      for (const score of ag.assignments) {
+      newStudent[e.assignment_id] = (e.submission.score / score.points_possible);
+      avg = getAverage();
+      break;
+      }
+      id.push(newStudent);
+    } else {
+      id.forEach((learner) => {
+        if (e.learner_id === learner.id) {
+          for (const score of ag.assignments) {
+
+            // Convert dates from strings to dates
+            const dueDate = new Date(score.due_at);
+            const submissionDate = new Date(e.submission.submitted_at)
+
+            // Compare dates to do correct calculations
+            if (dueDate < submissionDate) {
+            learner[e.assignment_id] = ((e.submission.score - 15) / score.points_possible);
+                // To ensure assignment id still matches with AssignmentGroup Id
+              } if (e.assignment_id === score.id) {
+                if (dueDate > submissionDate) {
+                  learner[e.assignment_id] = (e.submission.score / score.points_possible);
+
+                }
+            }
+
+            }
+          }
+        })
+      }
+      })
+
+      // To print out error statement if AssignmentGroup does not belong to its course
+  } catch (err) {
+    console.log(err)
   }
-
-    });
-      
-  
-
-      // Getting the average from the scores - this works, but formatting is not right
-      // for (const i of ag.assignments) {
-      //   for (const j of data) {
-      //     if (i.id == j.assignment_id) {
-      //       let average = j.submission.score / i.points_possible;
-      //       id.push({average: average})
-      //   }
-        
-      // }
-
-    // Checking if the assigment is due yet
-    // for (const i of ag.assignments) {
-    //   for (const j of data) {
-    //     if (i.due_at < j.submission.submitted_at) {
-    //       id.push({date: "Assignment is not due yet"})
-    //     }
-    //   }
-    // }
-
-    //   }
-    
       return id;
   }
 
+
 // Helper Function
-// function getAverage (ag, data) {
-//   let average = [];
-
-//   for (const i of ag.assignments) {
-//     for (const j of data) {
-//       if (i.id == j.assignment_id) {
-//         let average = j.submission.score / i.points_possible;
-//         average.push({average: average})
-//       }
-//     }
-//   }
-//   return averages;
-// }
-
-
-//     if (i == 0) { // If not the learner_id
-    //       e.forEach(e => {
-    //         id.push(e)
-    //       })
-    //     } else { // Array to get average score
-    //       let assignment_id = makeObject(id, e);
-    //       newArray.push(assignment_id)
-    //     }
-
-  // const transform1 = [{
-  //     // the ID of the learner for which this data has been collected
-  //     id: id, 
-  //     // the learner's total
-  //     avg: 50,
-  //     //  A key with its ID and the percentage the learner scored (AKA the average)
-  //     assignment_id: 5
-  // }]
-
-  // console.log(transform);
-  // Throw error telling the user that the AssignmentGroup input was invalid
-try {
-    if (AssignmentGroup.id !== AssignmentGroup.course_id) {
-            throw "Error! The input is invalid."
-    }
-}   catch (error) {
-    console.log(error);
-}
-  
+// Get average of score
+function getAverage () {
+  let sum = 0;
+  let average = 0;
+     for (const i of AssignmentGroup.assignments) {
+        for (const j of LearnerSubmissions) {
+          if (i.id == j.assignment_id) {
+            sum = j.submission.score + i.points_possible;
+            average += sum
+        }
+      } 
+      }
+  return average;
+  }
+    // console.log("Score: ", data.submission.score);
+  // console.log("Points possible: ", ag.points_possible);
     // Catch other errors and alert the user 
 if (AssignmentGroup.assignments.score == 0) { // If points possible was set to 0
     console.log("Invalid input! You cannot divide by 0!")
@@ -205,4 +188,15 @@ if (AssignmentGroup.assignments.score == 0) { // If points possible was set to 0
   // const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   
   // console.log(result);
+
+        // Getting the average from the scores - this works, but formatting is not right
+      // for (const i of ag.assignments) {
+      //   for (const j of data) {
+      //     if (i.id == j.assignment_id) {
+      //       let average = j.submission.score / i.points_possible;
+      //       id.push({average: average})
+      //   }
+        
+      // }
   
+    //   }

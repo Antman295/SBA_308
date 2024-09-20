@@ -15,3 +15,8 @@ This utilizes JavaScripts concent to format data from arrays with object. This m
 This was done with the use of JavaScript and the code was created inside Microsoft Visual Studio Code. Everything was submitted to a GitHub Repository:
 
 [Link to my Github] https://github.com/Antman295
+
+
+## Acknowledgement
+
+[To compare submission date and due date as date objects and not as string objects] https://www.freecodecamp.org/news/compare-two-dates-in-javascript/
